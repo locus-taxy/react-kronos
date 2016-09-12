@@ -236,12 +236,12 @@ class Calendar extends Component {
   }
 
   render() {
-    const { level, datetime, classes, inputRect } = this.props
+    const { level, datetime, classes, inputRect, theme } = this.props
 
-    let calendarClass = classes.calendarBelow
+    let calendarClass = cn(classes.calendarBelow, theme.calendarBelow);
 
     if ((inputRect.top + inputRect.height + 237) > this.state.windowHeight) {
-      calendarClass = classes.calendarAbove
+      calendarClass = cn(classes.calendarAbove, theme.calendarAbove)
     }
 
     return (
@@ -257,8 +257,9 @@ class Calendar extends Component {
             onNext={::this.onNavigateRight}
             onTitle={::this.onNavigateUp}
             title={this.getTitle(level, datetime)}
+            theme={theme}
           /> }
-        <div className={cn(classes.grid, level)}>
+        <div className={cn(classes.grid, theme.grid, level)}>
           { this.getCells(level, datetime).map( (cell, i) => {
               let type
               switch (true) {
@@ -287,13 +288,14 @@ class Calendar extends Component {
                   moment={cell.moment}
                   onClick={::this.onNavigateCell}
                   classes={classes}
+                  theme={theme}
                   invalid={this.props.validate(cell.moment, level)}
                 />
               )
             })
           }
           { level != 'hours' &&
-            <div className={classes.today} onClick={::this.onToday}>
+            <div className={cn(classes.today, theme.today)} onClick={::this.onToday}>
               { get(this.props, 'options.format.today') || 'Today' }
             </div>
           }

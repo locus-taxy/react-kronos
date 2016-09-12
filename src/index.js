@@ -66,6 +66,7 @@ class Kronos extends Component {
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
     onSelect: PropTypes.func,
+    theme: PropTypes.any
   }
 
   static defaultProps = {
@@ -75,6 +76,7 @@ class Kronos extends Component {
     shouldTriggerOnChangeForDateTimeOutsideRange: false,
     preventClickOnDateTimeOutsideRange: false,
     visible: false,
+    theme: {}
   }
 
   static above = false
@@ -379,15 +381,16 @@ class Kronos extends Component {
   render() {
     const mainClasses = cn('react-kronos',
       this.props.id,
-      this.props.classes.kronos
+      this.props.classes.kronos,
+      this.props.theme.kronos
     )
-    const inputClasses = cn(this.props.classes.input,
+    const inputClasses = cn(this.props.classes.input, this.props.theme.input,
       { 'outside-range': this.state.dateTimeExceedsValidRange }
     )
     const visible = this.props.controlVisibility
       ? this.props.visible
       : this.state.visible
-
+      console.log(this.props.theme);
     return (
       <div className={mainClasses}>
         <input
@@ -414,6 +417,7 @@ class Kronos extends Component {
             validate={::this.validate}
             options={this.props.options}
             inputRect={this._input.getClientRects()[0]}
+            theme={this.props.theme}
           />
         }
       </div>
