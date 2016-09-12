@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import createStyledComponent from './styled-component'
-import getStyle from './styles'
 
 class Navigation extends Component {
   static propTypes = {
@@ -14,8 +12,8 @@ class Navigation extends Component {
 
   render() {
     return (
-      <div className={this.props.classes.nav}>
-        <div className="arrow" onClick={this.props.onPrev}>
+      <div className={this.props.theme.nav}>
+        <div className='arrow' onClick={this.props.onPrev}>
           «
         </div>
         <div className="title" onClick={this.props.onTitle}>
@@ -29,6 +27,4 @@ class Navigation extends Component {
   }
 }
 
-export default createStyledComponent(Navigation, (props, instance) =>
-  getStyle('navigation', props, instance),
-)
+export default Navigation;

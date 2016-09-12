@@ -10,12 +10,11 @@ export default class Cell extends Component {
     selected: PropTypes.bool,
     today: PropTypes.bool,
     onClick: PropTypes.func,
-    classes: PropTypes.object,
   }
 
   render() {
-    const classes = cn(
-      this.props.classes.cell,
+    const classNames = cn(
+      this.props.theme.cell,
       this.props.level,
       this.props.type,
       { selected: this.props.selected },
@@ -25,7 +24,7 @@ export default class Cell extends Component {
 
     return (
       <div
-        className={classes}
+        className={classNames}
         onClick={() => this.props.onClick(this.props.moment)}
       >
         {this.props.label}

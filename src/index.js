@@ -5,14 +5,8 @@ import Moment from 'moment'
 
 import cn from 'classnames'
 
-import jss from 'jss'
-import preset from 'jss-preset-default'
-jss.setup(preset())
-
 import { Keys, Levels, Units, Types } from './constants'
 import Calendar from './calendar'
-import createStyledComponent from './styled-component'
-import getStyle from './styles'
 
 const ISOregex = /((\d{4}\-\d\d\-\d\d)[tT]([\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))/
 const minutesOfDay = m => {
@@ -84,6 +78,7 @@ class Kronos extends Component {
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
     onSelect: PropTypes.func,
+    theme: PropTypes.Object
   }
 
   static defaultProps = {
@@ -94,6 +89,7 @@ class Kronos extends Component {
     preventClickOnDateTimeOutsideRange: false,
     visible: false,
     disabled: false,
+    theme: {}
   }
 
   static above = false
@@ -392,18 +388,18 @@ class Kronos extends Component {
   render() {
     const mainClasses = cn(
       'react-kronos',
+      this.props.className,
       this.props.instance,
-      this.props.classes.kronos,
+      this.props.theme.kronos
     )
     const inputClasses = cn(
       this.props.inputClassName,
-      this.props.classes.input,
+      this.props.theme.input,
       { 'outside-range': this.state.dateTimeExceedsValidRange },
     )
     const visible = this.props.controlVisibility
       ? this.props.visible
       : this.state.visible
-
     return (
       <div className={mainClasses}>
         <input
@@ -438,12 +434,12 @@ class Kronos extends Component {
             timeStep={this.props.timeStep}
             style={this.props.calendarStyle}
             className={this.props.calendarClassName}
+            theme={this.props.theme}
           />}
       </div>
     )
   }
 }
 
-export default createStyledComponent(Kronos, (props, instance) =>
-  getStyle('index', props, instance),
-)
+
+export default Kronos;
