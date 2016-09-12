@@ -1,8 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import cn from 'classnames'
-
-import createStyledComponent from './styled-component'
-import getStyle from './styles'
 
 
 class Navigation extends Component {
@@ -16,7 +12,7 @@ class Navigation extends Component {
 
   render() {
     return (
-      <div className={cn(this.props.classes.nav, this.props.theme.nav)}>
+      <div className={this.props.theme.nav}>
         <div className='arrow' onClick={this.props.onPrev}>
           «
         </div>
@@ -31,6 +27,4 @@ class Navigation extends Component {
   }
 }
 
-export default createStyledComponent(Navigation,
-  (props, id) => getStyle('navigation', props, id)
-)
+export default Navigation;

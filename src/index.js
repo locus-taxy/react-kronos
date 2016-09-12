@@ -4,17 +4,8 @@ import Moment from 'moment'
 
 import cn from 'classnames'
 
-import jss from 'jss'
-import nested from 'jss-nested'
-import camelCase from 'jss-camel-case'
-import vendorPrefixer from 'jss-vendor-prefixer'
-import defaultUnit from 'jss-default-unit'
-jss.use(nested(), camelCase(), vendorPrefixer(), defaultUnit())
-
 import { Keys, Levels, Units, Types } from './constants'
 import Calendar from './calendar'
-import createStyledComponent from './styled-component'
-import getStyle from './styles'
 
 const ISOregex = /((\d{4}\-\d\d\-\d\d)[tT]([\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))/
 const minutesOfDay = (m) => {
@@ -381,17 +372,15 @@ class Kronos extends Component {
   render() {
     const mainClasses = cn('react-kronos',
       this.props.id,
-      this.props.classes.kronos,
       this.props.theme.kronos
     )
-    console.log(this.props.theme, mainClasses);
-    const inputClasses = cn(this.props.classes.input, this.props.theme.input,
+
+    const inputClasses = cn(this.props.theme.input,
       { 'outside-range': this.state.dateTimeExceedsValidRange }
     )
     const visible = this.props.controlVisibility
       ? this.props.visible
       : this.state.visible
-      console.log(this.props.theme);
     return (
       <div className={mainClasses}>
         <input
@@ -428,6 +417,4 @@ class Kronos extends Component {
 }
 
 
-export default createStyledComponent(Kronos,
-  (props, id) => getStyle('index', props, id)
-)
+export default Kronos;

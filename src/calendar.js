@@ -10,8 +10,6 @@ import cn from 'classnames'
 import { Levels, Units } from './constants'
 import Navigation from './nav'
 import Cell from './cell'
-import createStyledComponent from './styled-component'
-import getStyle from './styles'
 
 
 class Calendar extends Component {
@@ -236,12 +234,12 @@ class Calendar extends Component {
   }
 
   render() {
-    const { level, datetime, classes, inputRect, theme } = this.props
+    const { level, datetime, inputRect, theme } = this.props
 
-    let calendarClass = cn(classes.calendarBelow, theme.calendarBelow);
+    let calendarClass = theme.calendarBelow;
 
     if ((inputRect.top + inputRect.height + 237) > this.state.windowHeight) {
-      calendarClass = cn(classes.calendarAbove, theme.calendarAbove)
+      calendarClass = theme.calendarAbove;
     }
 
     return (
@@ -259,7 +257,7 @@ class Calendar extends Component {
             title={this.getTitle(level, datetime)}
             theme={theme}
           /> }
-        <div className={cn(classes.grid, theme.grid, level)}>
+        <div className={cn(theme.grid, level)}>
           { this.getCells(level, datetime).map( (cell, i) => {
               let type
               switch (true) {
@@ -287,7 +285,6 @@ class Calendar extends Component {
                   today={cell.today}
                   moment={cell.moment}
                   onClick={::this.onNavigateCell}
-                  classes={classes}
                   theme={theme}
                   invalid={this.props.validate(cell.moment, level)}
                 />
@@ -295,7 +292,7 @@ class Calendar extends Component {
             })
           }
           { level != 'hours' &&
-            <div className={cn(classes.today, theme.today)} onClick={::this.onToday}>
+            <div className={theme.today} onClick={::this.onToday}>
               { get(this.props, 'options.format.today') || 'Today' }
             </div>
           }
@@ -307,6 +304,4 @@ class Calendar extends Component {
 }
 
 
-export default createStyledComponent(Calendar,
-  (props, id) => getStyle('calendar', props, id)
-)
+export default Calendar;
