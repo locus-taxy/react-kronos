@@ -57,7 +57,8 @@ class Kronos extends Component {
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
     onSelect: PropTypes.func,
-    theme: PropTypes.any
+    theme: PropTypes.any,
+    className: PropTypes.any,
   }
 
   static defaultProps = {
@@ -371,6 +372,7 @@ class Kronos extends Component {
 
   render() {
     const mainClasses = cn('react-kronos',
+      this.props.className,
       this.props.id,
       this.props.theme.kronos
     )
