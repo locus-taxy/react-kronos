@@ -384,6 +384,7 @@ class Kronos extends Component {
       this.props.classes.kronos,
       this.props.theme.kronos
     )
+    console.log(this.props.theme, mainClasses);
     const inputClasses = cn(this.props.classes.input, this.props.theme.input,
       { 'outside-range': this.state.dateTimeExceedsValidRange }
     )

@@ -16,6 +16,7 @@ export default class Cell extends Component {
   render() {
     const classes = cn(
       this.props.classes.cell,
+      this.props.theme.cell,
       this.props.level,
       this.props.type,
       { selected: this.props.selected },
