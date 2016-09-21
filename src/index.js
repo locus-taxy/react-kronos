@@ -264,9 +264,7 @@ class Kronos extends Component {
   }
 
   onFocusInput(e) {
-    if (this.props.controlVisibility) {
-      if (this.props.onFocus) this.props.onFocus(e)
-    }
+    if (this.props.onFocus) this.props.onFocus(e)
     else {
       this.toggle(true)
     }
@@ -384,7 +382,7 @@ class Kronos extends Component {
       ? this.props.visible
       : this.state.visible
     return (
-      <div className={mainClasses}>
+      <div className={mainClasses} data-toolbox="kronos">
         <input
           type='text'
           ref={input => this._input = input}
