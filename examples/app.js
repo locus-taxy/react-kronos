@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Moment from 'moment'
-import Kronos from  'kronos'
+import Kronos from 'kronos'
 
 
 export default class App extends Component {
@@ -103,6 +103,8 @@ export default class App extends Component {
           hour: 'H:mm',
         },
       },
+      hideOutsideDateTimes: true,
+      timeStep: 15,
       // shouldTriggerOnChangeForDateTimeOutsideRange: true,
       // closeOnBlur: false,
     }
@@ -118,7 +120,7 @@ export default class App extends Component {
         <div style={style.page}>
           <header style={style.header}>
             <div>
-              <h1 style={{ margin: 0 }}>React Kronos 1.4.2</h1>
+              <h1 style={{ margin: 0 }}>React Kronos 1.5.3</h1>
               <span style={style.tagline}>A fast, intuitive, and elegant date and time picker for React.</span>
             </div>
             <div style={style.icon}>

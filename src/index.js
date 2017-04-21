@@ -30,6 +30,7 @@ class Kronos extends Component {
   static propTypes = {
     date: PropTypes.any,
     time: PropTypes.any,
+    timeStep: PropTypes.number,
     min: PropTypes.any,
     max: PropTypes.any,
     minTime: PropTypes.any,
@@ -49,6 +50,7 @@ class Kronos extends Component {
     placeholder: PropTypes.string,
     name: PropTypes.string,
     options: PropTypes.object,
+    hideOutsideDateTimes: PropTypes.bool,
     // Advanced controls
     controlVisibility: PropTypes.bool,
     visible: PropTypes.bool,
@@ -383,31 +385,33 @@ class Kronos extends Component {
       : this.state.visible
     return (
       <div className={mainClasses} data-toolbox="kronos">
-        <input
-          type='text'
-          ref={input => this._input = input}
-          value={this.state.input || ''}
-          onClick={::this.onClickInput}
-          onFocus={::this.onFocusInput}
-          onBlur={::this.onBlurInput}
-          onKeyDown={e => this.onKeyDown(e.keyCode)}
-          onChange={::this.onChangeInput}
-          placeholder={this.props.placeholder}
-          name={this.props.name}
-          className={inputClasses}
-        />
-        { visible &&
-          <Calendar
-            id={this.props.id}
-            datetime={this.state.datetime}
-            onSelect={::this.onSelect}
-            above={bool => typeof bool === 'undefined' ? this.above : this.above = bool}
-            level={this.state.level}
-            setLevel={level => this.setState({ level }) }
-            validate={::this.validate}
-            options={this.props.options}
-            inputRect={this._input.getClientRects()[0]}
-            theme={this.props.theme}
+          <input
+              type='text'
+              ref={input => this._input = input}
+              value={this.state.input || ''}
+              onClick={::this.onClickInput}
+              onFocus={::this.onFocusInput}
+              onBlur={::this.onBlurInput}
+              onKeyDown={e => this.onKeyDown(e.keyCode)}
+              onChange={::this.onChangeInput}
+              placeholder={this.props.placeholder}
+              name={this.props.name}
+              className={inputClasses}
+          />
+          { visible &&
+              <Calendar
+                  id={this.props.id}
+                  datetime={this.state.datetime}
+                  onSelect={::this.onSelect}
+                  above={bool => typeof bool === 'undefined' ? this.above : this.above = bool}
+                  level={this.state.level}
+                  setLevel={level => this.setState({ level }) }
+                  validate={::this.validate}
+                  options={this.props.options}
+                  inputRect={this._input.getClientRects()[0]}
+                  theme={this.props.theme}
+                  hideOutsideDateTimes={this.props.hideOutsideDateTimes}
+                  timeStep={this.props.timeStep}
           />
         }
       </div>

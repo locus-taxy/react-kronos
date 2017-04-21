@@ -1,4 +1,4 @@
-React Kronos 1.4
+React Kronos 1.5
 ================
 
 A fast, intuitive, and elegant date and time picker for React.
@@ -40,6 +40,7 @@ A fast, intuitive, and elegant date and time picker for React.
 **Props:**
 - `date` - *Date()*, *Moment()*, *ISO*, or *string* (if string, must match `format`)
 - `time` - *Date()*, *Moment()*, *ISO*, or *string* (if string, must match `format`)
+- `timeStep` - *number* : minutes for time step (if not specified: 30 minutes)
 - `format` - *string* : [Moment formatting](http://momentjs.com/docs/#/parsing/string-format/) of date / time
 - `onChange` - *function* : native onChange method
 - `onChangeDateTime` - *function* : change method called when there is a new value
@@ -52,6 +53,7 @@ A fast, intuitive, and elegant date and time picker for React.
 - `closeOnBlur` - *boolean* : closes the dropdown when the field is blurred (default: `true`)
 - `shouldTriggerOnChangeForDateTimeOutsideRange` - *boolean*: optionally allow dates outside min/max range to trigger onChanges (default: `false`)
 - `preventClickOnDateTimeOutsideRange` - *boolean*: optionally prevent users from clicking on dates outside min/max range (default: `false`)
+- `hideOutsideDateTimes` - *boolean*: optionally hide times that do not pass validation
 - `placeholder` - *string* : placeholder text when there is no value
 - `name` - *string* : name used for the input form
 - `options:`
