@@ -333,7 +333,7 @@ class Kronos extends Component {
 
     this.save(datetime)
 
-    if (this.props.onSelect) this.props.onSelect(datetime, willBeVisible)
+    if (this.props.onSelect) this.props.onSelect(datetime, willBeVisible, shouldClose)
   }
 
   onKeyDown(code) {
