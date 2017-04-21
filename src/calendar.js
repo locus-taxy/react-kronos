@@ -269,7 +269,7 @@ class Calendar extends Component {
   }
 
   render() {
-    const { level, datetime, classes, inputRect, hideOutsideDateTimes } = this.props
+    const { level, datetime, theme, inputRect, hideOutsideDateTimes } = this.props
 
     let calendarClass = theme.calendarBelow;
 
