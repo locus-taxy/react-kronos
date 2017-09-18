@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Moment from 'moment'
 
@@ -8,13 +9,11 @@ import { Keys, Levels, Units, Types } from './constants'
 import Calendar from './calendar'
 
 const ISOregex = /((\d{4}\-\d\d\-\d\d)[tT]([\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))/
-const minutesOfDay = (m) => {
+const minutesOfDay = m => {
   return Moment(m).minutes() + Moment(m).hours() * 60
 }
 
-
 class Kronos extends Component {
-
   constructor(props) {
     super(props)
 
@@ -49,7 +48,28 @@ class Kronos extends Component {
     closeOnBlur: PropTypes.bool,
     placeholder: PropTypes.string,
     name: PropTypes.string,
-    options: PropTypes.object,
+    disabled: PropTypes.bool,
+    inputStyle: PropTypes.object,
+    inputClassName: PropTypes.string,
+    inputId: PropTypes.string,
+    calendarStyle: PropTypes.object,
+    calendarClassName: PropTypes.string,
+    options: PropTypes.shape({
+      color: PropTypes.string,
+      corners: PropTypes.number,
+      font: PropTypes.string,
+      locale: PropTypes.shape({
+        lang: PropTypes.string,
+        settings: PropTypes.object,
+      }),
+      format: PropTypes.shape({
+        today: PropTypes.string,
+        year: PropTypes.string,
+        month: PropTypes.string,
+        day: PropTypes.string,
+        hour: PropTypes.string,
+      }),
+    }),
     hideOutsideDateTimes: PropTypes.bool,
     // Advanced controls
     controlVisibility: PropTypes.bool,
@@ -70,7 +90,8 @@ class Kronos extends Component {
     shouldTriggerOnChangeForDateTimeOutsideRange: false,
     preventClickOnDateTimeOutsideRange: false,
     visible: false,
-    theme: {}
+    theme: {},
+    disabled: false,
   }
 
   static above = false
@@ -94,27 +115,23 @@ class Kronos extends Component {
       datetime = Moment()
       input = null
       type = Types.MOMENT
-    }
-    else {
+    } else {
       datetime = this.parse(prop)
       input = datetime.format(this.format(props))
       switch (typeof prop) {
         case 'object':
           if (Moment.isDate(prop)) {
             type = Types.JS_DATE
-          }
-          else if (Moment.isMoment(prop)) {
+          } else if (Moment.isMoment(prop)) {
             type = Types.MOMENT
-          }
-          else {
+          } else {
             type = null
           }
           break
         case 'string':
           if (prop.match(ISOregex)) {
             type = Types.ISO
-          }
-          else {
+          } else {
             type = Types.STRING
           }
           break
@@ -131,12 +148,12 @@ class Kronos extends Component {
   getDefaultLevel() {
     if (typeof this.props.date !== 'undefined') {
       return Units.DAY
-    }
-    else if (typeof this.props.time !== 'undefined') {
+    } else if (typeof this.props.time !== 'undefined') {
       return Units.HOUR
-    }
-    else {
-      console.warn('Please set a date or time prop. It can be null but not undefined.')
+    } else {
+      console.warn(
+        'Please set a date or time prop. It can be null but not undefined.',
+      )
       return Units.DAY
     }
   }
@@ -145,14 +162,11 @@ class Kronos extends Component {
     props = props || this.props
     if (typeof props.format !== 'undefined') {
       return props.format
-    }
-    else if (typeof props.date !== 'undefined') {
+    } else if (typeof props.date !== 'undefined') {
       return 'MM-DD-YYYY'
-    }
-    else if (typeof props.time !== 'undefined') {
+    } else if (typeof props.time !== 'undefined') {
       return 'h:mm a'
-    }
-    else {
+    } else {
       return null
     }
   }
@@ -176,7 +190,7 @@ class Kronos extends Component {
     if (!parsing.isValid()) {
       let test = new Date(input)
       if (isNaN(test.getTime())) {
-        test = this.state && this.state.datetime || Moment()
+        test = (this.state && this.state.datetime) || Moment()
       }
 
       parsing = Moment(test)
@@ -207,22 +221,31 @@ class Kronos extends Component {
   validate(datetime, timeUnit, isSaving) {
     let outsideRange = false
 
-    if (this.props.min && Moment(datetime).isBefore(this.props.min) ) {
+    if (this.props.min && Moment(datetime).isBefore(this.props.min)) {
       outsideRange = true
     }
-    if (this.props.max && Moment(datetime).isAfter(this.props.max) ) {
+    if (this.props.max && Moment(datetime).isAfter(this.props.max)) {
       outsideRange = true
     }
 
-    if (this.props.minTime && minutesOfDay(datetime) < minutesOfDay(this.props.minTime)) {
+    if (
+      this.props.minTime &&
+      minutesOfDay(datetime) < minutesOfDay(this.props.minTime)
+    ) {
       outsideRange = true
     }
-    if (this.props.maxTime && minutesOfDay(datetime) > minutesOfDay(this.props.maxTime)) {
+    if (
+      this.props.maxTime &&
+      minutesOfDay(datetime) > minutesOfDay(this.props.maxTime)
+    ) {
       outsideRange = true
     }
 
     if (outsideRange && timeUnit !== 'hours') {
-      if (Moment(datetime).isSame(this.props.min, timeUnit) || Moment(datetime).isSame(this.props.max, timeUnit)) {
+      if (
+        Moment(datetime).isSame(this.props.min, timeUnit) ||
+        Moment(datetime).isSame(this.props.max, timeUnit)
+      ) {
         outsideRange = false
       }
     }
@@ -259,15 +282,15 @@ class Kronos extends Component {
   onClickInput(e) {
     if (this.props.controlVisibility) {
       if (this.props.onClick) this.props.onClick(e)
-    }
-    else {
+    } else {
       this.toggle(true)
     }
   }
 
   onFocusInput(e) {
-    if (this.props.onFocus) this.props.onFocus(e)
-    else {
+    if (this.props.controlVisibility) {
+      if (this.props.onFocus) this.props.onFocus(e)
+    } else {
       this.toggle(true)
     }
   }
@@ -277,15 +300,13 @@ class Kronos extends Component {
 
     if (this.above) {
       ReactDOM.findDOMNode(this._input).focus()
-    }
-    else if (this.props.closeOnBlur) {
+    } else if (this.props.closeOnBlur) {
       this.toggle(false)
       if (this.props.onBlur) this.props.onBlur(e)
     }
     if (this.state.input == this.state.datetime.format(this.format())) {
       return
-    }
-    else {
+    } else {
       datetime = this.parse(this.state.input)
       if (datetime) this.save(datetime)
     }
@@ -298,15 +319,13 @@ class Kronos extends Component {
     let datetime = Moment(input, this.format(), true)
     if (datetime.isValid()) {
       this.save(datetime)
-    }
-    else if (input == '') {
+    } else if (input == '') {
       this.setState({
         datetime: null,
         input: '',
       })
       this.props.onChangeDateTime && this.props.onChangeDateTime(null)
-    }
-    else {
+    } else {
       this.setState({ input })
     }
   }
@@ -314,18 +333,17 @@ class Kronos extends Component {
   onSelect(datetime, close, timeUnit) {
     let shouldClose = close
     const { visible } = this.state
-    const {
-      closeOnSelect,
-      preventClickOnDateTimeOutsideRange,
-    } = this.props
+    const { closeOnSelect, preventClickOnDateTimeOutsideRange } = this.props
 
     if (timeUnit) {
       if (!this.validate(datetime, timeUnit.unit)) shouldClose = false
-    }
-    else {
+    } else {
       if (!this.validate(datetime)) shouldClose = false
     }
-    if (close && shouldClose === false && preventClickOnDateTimeOutsideRange) return
+
+    if (close && shouldClose === false && preventClickOnDateTimeOutsideRange) {
+      return
+    }
 
     const willBeVisible = closeOnSelect && shouldClose ? !visible : visible
 
@@ -333,7 +351,9 @@ class Kronos extends Component {
 
     this.save(datetime)
 
-    if (this.props.onSelect) this.props.onSelect(datetime, willBeVisible, shouldClose)
+    if (this.props.onSelect) {
+      this.props.onSelect(datetime, willBeVisible, shouldClose)
+    }
   }
 
   onKeyDown(code) {
@@ -350,17 +370,14 @@ class Kronos extends Component {
       case Keys.ENTER:
         if (lvl.down) {
           this.setState({ level: lvl.down })
-        }
-        else {
+        } else {
           if (this.state.input == datetime.format(this.format())) {
             if (!this.validate(datetime)) {
               this.toggle(true)
-            }
-            else {
+            } else {
               this.toggle()
             }
-          }
-          else {
+          } else {
             if (!this.state.visible) this.toggle(true)
             datetime = this.parse(this.state.input)
             if (datetime) this.save(datetime)
@@ -371,13 +388,17 @@ class Kronos extends Component {
   }
 
   render() {
-    const mainClasses = cn('react-kronos',
+    const mainClasses = cn(
+      'react-kronos',
       this.props.className,
+      this.props.instance,
       this.props.id,
       this.props.theme.kronos
     )
 
-    const inputClasses = cn(this.props.theme.input,
+    const inputClasses = cn(
+      this.props.inputClassName,
+      this.props.theme.input,
       { 'outside-range': this.state.dateTimeExceedsValidRange }
     )
     const visible = this.props.controlVisibility
@@ -387,6 +408,7 @@ class Kronos extends Component {
       <div className={mainClasses} data-toolbox="kronos">
           <input
               type='text'
+              id={this.props.inputId}
               ref={input => this._input = input}
               value={this.state.input || ''}
               onClick={::this.onClickInput}
@@ -397,10 +419,12 @@ class Kronos extends Component {
               placeholder={this.props.placeholder}
               name={this.props.name}
               className={inputClasses}
+              disabled={this.props.disabled}
+              style={this.props.inputStyle}
           />
           { visible &&
               <Calendar
-                  id={this.props.id}
+                  instance={this.props.instance}
                   datetime={this.state.datetime}
                   onSelect={::this.onSelect}
                   above={bool => typeof bool === 'undefined' ? this.above : this.above = bool}
@@ -412,13 +436,13 @@ class Kronos extends Component {
                   theme={this.props.theme}
                   hideOutsideDateTimes={this.props.hideOutsideDateTimes}
                   timeStep={this.props.timeStep}
+                  style={this.props.calendarStyle}
+                  className={this.props.calendarClassName}
           />
         }
       </div>
     )
   }
-
 }
-
 
 export default Kronos;

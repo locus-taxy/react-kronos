@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames'
 
 export default class Cell extends Component {
-
   static propTypes = {
     label: PropTypes.string,
     level: PropTypes.string,
@@ -31,5 +31,4 @@ export default class Cell extends Component {
       </div>
     )
   }
-
 }

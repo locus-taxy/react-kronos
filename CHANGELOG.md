@@ -1,6 +1,22 @@
 Changelog
 =========
 
+## 1.6.0
+
+**Breaking**:
+- renamed `options.moment` prop to `options.locale`
+
+**Non-breaking**:
+- refactored how the locale is set to fix several issues
+- add `disabled` prop
+- add `inputStyle`, `inputClassName`, and `inputId` props
+- add `calendarStyle` and `calendarClassName` props
+- add `shouldClose` parameter to controlled `onSelect` callback
+
+## 1.5.4
+
+- removed margin and padding style that was clashing
+
 ## 1.5.3
 
 - update jss dependency to latest version (6.3.0)

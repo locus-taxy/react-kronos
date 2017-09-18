@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 
 class Navigation extends Component {
-
   static propTypes = {
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
@@ -13,13 +13,13 @@ class Navigation extends Component {
   render() {
     return (
       <div className={this.props.theme.nav}>
-        <div className='arrow' onClick={this.props.onPrev}>
+        <div className="arrow" onClick={this.props.onPrev}>
           «
         </div>
-        <div className='title' onClick={this.props.onTitle}>
+        <div className="title" onClick={this.props.onTitle}>
           {this.props.title}
         </div>
-        <div className='arrow' onClick={this.props.onNext}>
+        <div className="arrow" onClick={this.props.onNext}>
           »
         </div>
       </div>
