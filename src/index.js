@@ -407,6 +407,7 @@ class Kronos extends Component {
       <div className={mainClasses} data-toolbox="kronos">
         <TetherComponent 
           attachment="bottom center"
+          targetAttachment="bottom center"
           constraints={[
             {
               to: 'scrollParent',
