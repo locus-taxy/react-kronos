@@ -405,7 +405,15 @@ class Kronos extends Component {
       : this.state.visible
     return (
       <div className={mainClasses} data-toolbox="kronos">
-        <TetherComponent attachment="bottom center">
+        <TetherComponent 
+          attachment="bottom center"
+          constraints={[
+            {
+              to: 'scrollParent',
+              attachment: 'together',
+            },
+          ]}
+          >
           <input
             type="text"
             id={this.props.inputId}
