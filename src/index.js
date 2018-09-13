@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Moment from 'moment'
+import TetherComponent from 'react-tether';
 
 import cn from 'classnames'
 
@@ -404,40 +405,43 @@ class Kronos extends Component {
       : this.state.visible
     return (
       <div className={mainClasses} data-toolbox="kronos">
-        <input
-          type="text"
-          id={this.props.inputId}
-          ref={input => (this._input = input)}
-          value={this.state.input || ''}
-          onClick={::this.onClickInput}
-          onFocus={::this.onFocusInput}
-          onBlur={::this.onBlurInput}
-          onKeyDown={e => this.onKeyDown(e.keyCode)}
-          onChange={::this.onChangeInput}
-          placeholder={this.props.placeholder}
-          name={this.props.name}
-          className={inputClasses}
-          disabled={this.props.disabled}
-          style={this.props.inputStyle}
-        />
-        {visible &&
-          <Calendar
-            instance={this.props.instance}
-            datetime={this.state.datetime}
-            onSelect={::this.onSelect}
-            above={bool =>
-              typeof bool === 'undefined' ? this.above : (this.above = bool)}
-            level={this.state.level}
-            setLevel={level => this.setState({ level })}
-            validate={::this.validate}
-            options={this.props.options}
-            inputRect={this._input.getClientRects()[0]}
-            hideOutsideDateTimes={this.props.hideOutsideDateTimes}
-            timeStep={this.props.timeStep}
-            style={this.props.calendarStyle}
-            className={this.props.calendarClassName}
-            theme={this.props.theme}
-          />}
+        <TetherComponent attachment="bottom center">
+          <input
+            type="text"
+            id={this.props.inputId}
+            ref={input => (this._input = input)}
+            value={this.state.input || ''}
+            onClick={::this.onClickInput}
+            onFocus={::this.onFocusInput}
+            onBlur={::this.onBlurInput}
+            onKeyDown={e => this.onKeyDown(e.keyCode)}
+            onChange={::this.onChangeInput}
+            placeholder={this.props.placeholder}
+            name={this.props.name}
+            className={inputClasses}
+            disabled={this.props.disabled}
+            style={this.props.inputStyle}
+          />
+          {visible &&
+              <Calendar
+                instance={this.props.instance}
+                datetime={this.state.datetime}
+                onSelect={::this.onSelect}
+                above={bool =>
+                  typeof bool === 'undefined' ? this.above : (this.above = bool)}
+                level={this.state.level}
+                setLevel={level => this.setState({ level })}
+                validate={::this.validate}
+                options={this.props.options}
+                inputRect={this._input.getClientRects()[0]}
+                hideOutsideDateTimes={this.props.hideOutsideDateTimes}
+                timeStep={this.props.timeStep}
+                style={this.props.calendarStyle}
+                className={this.props.calendarClassName}
+                theme={this.props.theme}
+              />
+            }
+        </TetherComponent>
       </div>
     )
   }
