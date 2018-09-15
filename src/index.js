@@ -408,6 +408,7 @@ class Kronos extends Component {
           <Popover 
             isOpen={visible}
             place={'column'}
+            target={this._input}
             body={visible ? <Calendar
                     instance={this.props.instance}
                     datetime={this.state.datetime}
