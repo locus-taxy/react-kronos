@@ -315,9 +315,9 @@ class Kronos extends Component {
     let input = e.target.value
     let datetime = Moment(input, this.format(), true)
     if (datetime.isValid()) {
-      let date = this.state.datetime && this.state.datetime.toISOString().split('T')[0];
+      let date = this.state.datetime.toISOString().split('T')[0];
       const dateTimeString = `${date} ${datetime._d.getHours()}:${datetime._d.getMinutes()}`;
-      datetime = Moment(dateTimeString).utcOffset(420);
+      datetime = Moment(dateTimeString).utcOffset(this.state.datetime._offset);
       this.save(datetime)
     } else if (input == '') {
       this.setState({
