@@ -315,6 +315,11 @@ class Kronos extends Component {
     let input = e.target.value
     let datetime = Moment(input, this.format(), true)
     if (datetime.isValid()) {
+      // this changes is to create proper moment object with proper timezone.
+      // So that, it does not mess up the date to isoString convertion.
+      // In dropdown this.state.datetime is being used to calculate the time range,
+      // so we are using this moment object to create a new moment object for the
+      // choosen time. {line no. : 323~324}
       const [hour, minute] = datetime.format('HH:mm').split(':');
       datetime = this.state.datetime.clone().set({hour, minute});
       this.save(datetime)
