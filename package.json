@@ -1,8 +1,8 @@
 {
   "name": "react-kronos",
-  "version": "1.9.0",
+  "version": "1.8.0",
   "description": "A fast, intuitive, and elegant date and time picker for React.",
-  "main": "lib/index.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "start": "node devServer.js",
     "build": "npm run clean && npm run build:lib && npm run build:umd && npm run build:examples",
