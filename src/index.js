@@ -322,7 +322,8 @@ class Kronos extends Component {
       // so we are using this moment object to create a new moment object for the
       // choosen time/ date. {line no. : 324~333}
       if (this.props.format === 'DD/MM') {
-        const [date, month] = datetime.format('DD/MM').split('/');
+        let [date, month] = datetime.format('DD/MM').split('/');
+        [date, month] = [Number(date), Number(month) - 1];
         datetime = this.state.datetime.clone().set({date, month});
       } else if (this.props.format === 'h:mm a') {
         const [hour, minute] = datetime.format('HH:mm').split(':');
