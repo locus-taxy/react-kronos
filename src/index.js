@@ -321,7 +321,11 @@ class Kronos extends Component {
       // In dropdown this.state.datetime is being used to calculate the time range,
       // so we are using this moment object to create a new moment object for the
       // choosen time/ date. {line no. : 324~333}
-      if (this.props.format === 'DD/MM') {
+      if (this.props.format === 'DD/MM/YYYY') {
+        let [date, month, year] = datetime.format('DD/MM/YYYY').split('/');
+        [date, month, year] = [Number(date), Number(month) - 1, Number(year)];
+        datetime = this.state.datetime.clone().set({date, month, year});
+      } else if (this.props.format === 'DD/MM') {
         let [date, month] = datetime.format('DD/MM').split('/');
         [date, month] = [Number(date), Number(month) - 1];
         datetime = this.state.datetime.clone().set({date, month});
