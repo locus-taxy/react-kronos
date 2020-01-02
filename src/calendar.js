@@ -316,7 +316,7 @@ class Calendar extends Component {
                   selected={cell.selected}
                   today={cell.today}
                   moment={cell.moment}
-                  onClick={type !==' header' ? ::this.onNavigateCell : null}
+                  onClick={type !== 'header' ? ::this.onNavigateCell : null}
                   theme={theme}
                   invalid={this.props.validate(cell.moment, level)}
                 />
