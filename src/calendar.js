@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 
 import get from 'lodash/get'
+import noop from 'lodash/noop'
 
 import Moment from 'moment'
 import 'moment-range';
@@ -316,7 +317,7 @@ class Calendar extends Component {
                   selected={cell.selected}
                   today={cell.today}
                   moment={cell.moment}
-                  onClick={::this.onNavigateCell}
+                  onClick={type !== 'header' ? ::this.onNavigateCell : noop}
                   theme={theme}
                   invalid={this.props.validate(cell.moment, level)}
                 />
