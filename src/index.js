@@ -1,20 +1,22 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import ReactDOM from 'react-dom'
-import Moment from 'moment'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import ReactDOM from "react-dom";
+import Moment from "moment";
 
-import cn from 'classnames'
+import cn from "classnames";
 
-import { Keys, Levels, Units, Types } from './constants'
-import Calendar from './calendar'
+import { Keys, Levels, Units, Types } from "./constants";
+import Calendar from "./calendar";
+import { Portal } from "react-portal";
 
-const ISOregex = /((\d{4}\-\d\d\-\d\d)[tT]([\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))/
-const minutesOfDay = m => {
-  return Moment(m).minutes() + Moment(m).hours() * 60
-}
+const ISOregex =
+  /((\d{4}\-\d\d\-\d\d)[tT]([\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))/;
+const minutesOfDay = (m) => {
+  return Moment(m).minutes() + Moment(m).hours() * 60;
+};
 class Kronos extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       datetime: this.getDateTimeInput().datetime,
@@ -22,7 +24,7 @@ class Kronos extends Component {
       type: this.getDateTimeInput().type,
       visible: false,
       level: this.getDefaultLevel(),
-    }
+    };
   }
 
   static propTypes = {
@@ -78,8 +80,8 @@ class Kronos extends Component {
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
     onSelect: PropTypes.func,
-    theme: PropTypes.object
-  }
+    theme: PropTypes.object,
+  };
 
   static defaultProps = {
     closeOnSelect: true,
@@ -89,50 +91,50 @@ class Kronos extends Component {
     preventClickOnDateTimeOutsideRange: false,
     visible: false,
     disabled: false,
-    theme: {}
-  }
+    theme: {},
+  };
 
-  static above = false
+  static above = false;
 
   componentWillReceiveProps(nextProps) {
     if (this.props != nextProps) {
-      this.validate(this.getDateTimeInput(nextProps).datetime, null, true)
+      this.validate(this.getDateTimeInput(nextProps).datetime, null, true);
       this.setState({
         datetime: this.getDateTimeInput(nextProps).datetime,
         input: this.getDateTimeInput(nextProps).input,
-      })
+      });
     }
   }
 
   getDateTimeInput(props) {
-    props = props || this.props
-    let prop = props.date || props.time || null
+    props = props || this.props;
+    let prop = props.date || props.time || null;
 
-    let datetime, input, type
+    let datetime, input, type;
     if (prop === null) {
-      datetime = Moment()
-      input = null
-      type = Types.MOMENT
+      datetime = Moment();
+      input = null;
+      type = Types.MOMENT;
     } else {
-      datetime = this.parse(prop)
-      input = datetime.format(this.format(props))
+      datetime = this.parse(prop);
+      input = datetime.format(this.format(props));
       switch (typeof prop) {
-        case 'object':
+        case "object":
           if (Moment.isDate(prop)) {
-            type = Types.JS_DATE
+            type = Types.JS_DATE;
           } else if (Moment.isMoment(prop)) {
-            type = Types.MOMENT
+            type = Types.MOMENT;
           } else {
-            type = null
+            type = null;
           }
-          break
-        case 'string':
+          break;
+        case "string":
           if (prop.match(ISOregex)) {
-            type = Types.ISO
+            type = Types.ISO;
           } else {
-            type = Types.STRING
+            type = Types.STRING;
           }
-          break
+          break;
       }
     }
 
@@ -140,297 +142,294 @@ class Kronos extends Component {
       datetime: datetime,
       input: input,
       type: type,
-    }
+    };
   }
 
   getDefaultLevel() {
-    if (typeof this.props.date !== 'undefined') {
-      return Units.DAY
-    } else if (typeof this.props.time !== 'undefined') {
-      return Units.HOUR
+    if (typeof this.props.date !== "undefined") {
+      return Units.DAY;
+    } else if (typeof this.props.time !== "undefined") {
+      return Units.HOUR;
     } else {
       console.warn(
-        'Please set a date or time prop. It can be null but not undefined.',
-      )
-      return Units.DAY
+        "Please set a date or time prop. It can be null but not undefined."
+      );
+      return Units.DAY;
     }
   }
 
   format(props) {
-    props = props || this.props
-    if (typeof props.format !== 'undefined') {
-      return props.format
-    } else if (typeof props.date !== 'undefined') {
-      return 'MM-DD-YYYY'
-    } else if (typeof props.time !== 'undefined') {
-      return 'h:mm a'
+    props = props || this.props;
+    if (typeof props.format !== "undefined") {
+      return props.format;
+    } else if (typeof props.date !== "undefined") {
+      return "MM-DD-YYYY";
+    } else if (typeof props.time !== "undefined") {
+      return "h:mm a";
     } else {
-      return null
+      return null;
     }
   }
 
   toggle(visible) {
     // Attempt to exit early
     if (visible === this.state.visible) {
-      return
+      return;
     }
-    if (typeof visible === 'undefined') {
-      visible = !this.state.visible
+    if (typeof visible === "undefined") {
+      visible = !this.state.visible;
     }
     if (visible !== this.state.visible) {
-      this.setState({ visible })
+      this.setState({ visible });
     }
   }
 
   parse(input) {
-    if (input === null) return null
-    let parsing = Moment(input, this.format(), true)
+    if (input === null) return null;
+    let parsing = Moment(input, this.format(), true);
     if (!parsing.isValid()) {
-      let test = new Date(input)
+      let test = new Date(input);
       if (isNaN(test.getTime())) {
-        test = (this.state && this.state.datetime) || Moment()
+        test = (this.state && this.state.datetime) || Moment();
       }
 
-      parsing = Moment(test)
+      parsing = Moment(test);
     }
 
-    return parsing
+    return parsing;
   }
 
   save(saving) {
-    const { datetime } = this.state
-    if (typeof this.props.date !== 'undefined') {
-      saving.hours(datetime.hours())
-      saving.minutes(datetime.minutes())
+    const { datetime } = this.state;
+    if (typeof this.props.date !== "undefined") {
+      saving.hours(datetime.hours());
+      saving.minutes(datetime.minutes());
     }
-    if (typeof this.props.time !== 'undefined') {
-      saving.date(datetime.date())
-      saving.month(datetime.month())
-      saving.year(datetime.year())
+    if (typeof this.props.time !== "undefined") {
+      saving.date(datetime.date());
+      saving.month(datetime.month());
+      saving.year(datetime.year());
     }
     this.setState({
       datetime: saving,
       input: saving.format(this.format()),
-    })
+    });
 
-    if (this.validate(saving, null, true)) this.commit(saving)
+    if (this.validate(saving, null, true)) this.commit(saving);
   }
 
   validate(datetime, timeUnit, isSaving) {
-    let outsideRange = false
+    let outsideRange = false;
 
     if (this.props.min && Moment(datetime).isBefore(this.props.min)) {
-      outsideRange = true
+      outsideRange = true;
     }
     if (this.props.max && Moment(datetime).isAfter(this.props.max)) {
-      outsideRange = true
+      outsideRange = true;
     }
 
     if (
       this.props.minTime &&
       minutesOfDay(datetime) < minutesOfDay(this.props.minTime)
     ) {
-      outsideRange = true
+      outsideRange = true;
     }
     if (
       this.props.maxTime &&
       minutesOfDay(datetime) > minutesOfDay(this.props.maxTime)
     ) {
-      outsideRange = true
+      outsideRange = true;
     }
 
-    if (outsideRange && timeUnit !== 'hours') {
+    if (outsideRange && timeUnit !== "hours") {
       if (
         Moment(datetime).isSame(this.props.min, timeUnit) ||
         Moment(datetime).isSame(this.props.max, timeUnit)
       ) {
-        outsideRange = false
+        outsideRange = false;
       }
     }
 
     if (isSaving) {
-      this.setState({ dateTimeExceedsValidRange: outsideRange })
-      if (this.props.shouldTriggerOnChangeForDateTimeOutsideRange) return true
+      this.setState({ dateTimeExceedsValidRange: outsideRange });
+      if (this.props.shouldTriggerOnChangeForDateTimeOutsideRange) return true;
     }
 
-    return !outsideRange
+    return !outsideRange;
   }
 
   commit(datetime) {
-    let returnAs = this.props.returnAs || this.state.type
-    let result
+    let returnAs = this.props.returnAs || this.state.type;
+    let result;
     switch (returnAs) {
       case Types.ISO:
-        result = datetime.toISOString()
-        break
+        result = datetime.toISOString();
+        break;
       case Types.JS_DATE:
-        result = datetime.toDate()
-        break
+        result = datetime.toDate();
+        break;
       case Types.MOMENT:
-        result = datetime
-        break
+        result = datetime;
+        break;
       case Types.STRING:
-        result = datetime.format(this.format())
-        break
+        result = datetime.format(this.format());
+        break;
     }
 
-    this.props.onChangeDateTime && this.props.onChangeDateTime(result)
+    this.props.onChangeDateTime && this.props.onChangeDateTime(result);
   }
 
   onClickInput(e) {
     if (this.props.controlVisibility) {
-      if (this.props.onClick) this.props.onClick(e)
+      if (this.props.onClick) this.props.onClick(e);
     } else {
-      this.toggle(true)
+      this.toggle(true);
     }
   }
 
   onFocusInput(e) {
-    if (this.props.onFocus) this.props.onFocus(e)
+    if (this.props.onFocus) this.props.onFocus(e);
     else {
-      this.toggle(true)
+      this.toggle(true);
     }
   }
 
   onBlurInput(e) {
-    let datetime = this.state.datetime || Moment()
+    let datetime = this.state.datetime || Moment();
 
     if (this.above) {
-      ReactDOM.findDOMNode(this._input).focus()
+      ReactDOM.findDOMNode(this._input).focus();
     } else if (this.props.closeOnBlur) {
-      this.toggle(false)
-      if (this.props.onBlur) this.props.onBlur(e)
+      this.toggle(false);
+      if (this.props.onBlur) this.props.onBlur(e);
     }
     if (this.state.input == this.state.datetime.format(this.format())) {
-      return
+      return;
     } else {
-      datetime = this.parse(this.state.input)
-      if (datetime) this.save(datetime)
+      datetime = this.parse(this.state.input);
+      if (datetime) this.save(datetime);
     }
   }
 
   onChangeInput(e) {
-    if (this.props.onChange) this.props.onChange(e)
+    if (this.props.onChange) this.props.onChange(e);
 
-    let input = e.target.value
-    let datetime = Moment(input, this.format(), true)
+    let input = e.target.value;
+    let datetime = Moment(input, this.format(), true);
     if (datetime.isValid()) {
-
       // this changes is to create proper moment object with proper timezone.
       // So that, it does not mess up the date to isoString convertion.
       // In dropdown this.state.datetime is being used to calculate the time range,
       // so we are using this moment object to create a new moment object for the
       // choosen time/ date. {line no. : 324~333}
-      if (this.props.format === 'DD/MM/YYYY') {
-        let [date, month, year] = datetime.format('DD/MM/YYYY').split('/');
+      if (this.props.format === "DD/MM/YYYY") {
+        let [date, month, year] = datetime.format("DD/MM/YYYY").split("/");
         [date, month, year] = [Number(date), Number(month) - 1, Number(year)];
-        datetime = this.state.datetime.clone().set({date, month, year});
-      } else if (this.props.format === 'DD/MM') {
-        let [date, month] = datetime.format('DD/MM').split('/');
+        datetime = this.state.datetime.clone().set({ date, month, year });
+      } else if (this.props.format === "DD/MM") {
+        let [date, month] = datetime.format("DD/MM").split("/");
         [date, month] = [Number(date), Number(month) - 1];
-        datetime = this.state.datetime.clone().set({date, month});
-      } else if (this.props.format === 'h:mm a') {
-        const [hour, minute] = datetime.format('HH:mm').split(':');
-        datetime = this.state.datetime.clone().set({hour, minute});
+        datetime = this.state.datetime.clone().set({ date, month });
+      } else if (this.props.format === "h:mm a") {
+        const [hour, minute] = datetime.format("HH:mm").split(":");
+        datetime = this.state.datetime.clone().set({ hour, minute });
       }
-      this.save(datetime)
-    } else if (input == '') {
+      this.save(datetime);
+    } else if (input == "") {
       this.setState({
         datetime: null,
-        input: '',
-      })
-      this.props.onChangeDateTime && this.props.onChangeDateTime(null)
+        input: "",
+      });
+      this.props.onChangeDateTime && this.props.onChangeDateTime(null);
     } else {
-      this.setState({ input })
+      this.setState({ input });
     }
   }
 
   onSelect(datetime, close, timeUnit) {
-    let shouldClose = close
-    const { visible } = this.state
-    const { closeOnSelect, preventClickOnDateTimeOutsideRange } = this.props
+    let shouldClose = close;
+    const { visible } = this.state;
+    const { closeOnSelect, preventClickOnDateTimeOutsideRange } = this.props;
 
     if (timeUnit) {
-      if (!this.validate(datetime, timeUnit.unit)) shouldClose = false
+      if (!this.validate(datetime, timeUnit.unit)) shouldClose = false;
     } else {
-      if (!this.validate(datetime)) shouldClose = false
+      if (!this.validate(datetime)) shouldClose = false;
     }
 
     if (close && shouldClose === false && preventClickOnDateTimeOutsideRange) {
-      return
+      return;
     }
 
-    const willBeVisible = closeOnSelect && shouldClose ? !visible : visible
+    const willBeVisible = closeOnSelect && shouldClose ? !visible : visible;
 
-    this.setState({ visible: willBeVisible })
+    this.setState({ visible: willBeVisible });
 
-    this.save(datetime)
+    this.save(datetime);
 
     if (this.props.onSelect) {
-      this.props.onSelect(datetime, willBeVisible, shouldClose)
+      this.props.onSelect(datetime, willBeVisible, shouldClose);
     }
   }
 
   onKeyDown(code) {
-    let datetime = this.state.datetime || Moment()
-    let lvl = Levels[this.state.level]
+    let datetime = this.state.datetime || Moment();
+    let lvl = Levels[this.state.level];
 
     switch (code) {
       case Keys.UP:
-        this.onSelect(datetime.subtract(lvl.key.span, lvl.key.unit))
-        break
+        this.onSelect(datetime.subtract(lvl.key.span, lvl.key.unit));
+        break;
       case Keys.DOWN:
-        this.onSelect(datetime.add(lvl.key.span, lvl.key.unit))
-        break
+        this.onSelect(datetime.add(lvl.key.span, lvl.key.unit));
+        break;
       case Keys.ENTER:
         if (lvl.down) {
-          this.setState({ level: lvl.down })
+          this.setState({ level: lvl.down });
         } else {
           if (this.state.input == datetime.format(this.format())) {
             if (!this.validate(datetime)) {
-              this.toggle(true)
+              this.toggle(true);
             } else {
-              this.toggle()
+              this.toggle();
             }
           } else {
-            if (!this.state.visible) this.toggle(true)
-            datetime = this.parse(this.state.input)
-            if (datetime) this.save(datetime)
+            if (!this.state.visible) this.toggle(true);
+            datetime = this.parse(this.state.input);
+            if (datetime) this.save(datetime);
           }
         }
-        break
+        break;
     }
   }
 
   render() {
     const mainClasses = cn(
-      'react-kronos',
+      "react-kronos",
       this.props.className,
       this.props.instance,
       this.props.theme.kronos,
       {
-        [this.props.theme.kronosDisabled]: this.props.disabled
+        [this.props.theme.kronosDisabled]: this.props.disabled,
       }
-    )
-    const inputClasses = cn(
-      this.props.inputClassName,
-      this.props.theme.input,
-      { 'outside-range': this.state.dateTimeExceedsValidRange },
-    )
+    );
+    const inputClasses = cn(this.props.inputClassName, this.props.theme.input, {
+      "outside-range": this.state.dateTimeExceedsValidRange,
+    });
     const visible = this.props.controlVisibility
       ? this.props.visible
-      : this.state.visible
+      : this.state.visible;
     return (
       <div className={mainClasses} data-toolbox="kronos">
         <input
           type="text"
           id={this.props.inputId}
-          ref={input => (this._input = input)}
-          value={this.state.input || ''}
+          ref={(input) => (this._input = input)}
+          value={this.state.input || ""}
           onClick={::this.onClickInput}
           onFocus={::this.onFocusInput}
           onBlur={::this.onBlurInput}
-          onKeyDown={e => this.onKeyDown(e.keyCode)}
+          onKeyDown={(e) => this.onKeyDown(e.keyCode)}
           onChange={::this.onChangeInput}
           placeholder={this.props.placeholder}
           name={this.props.name}
@@ -438,28 +437,31 @@ class Kronos extends Component {
           disabled={this.props.disabled}
           style={this.props.inputStyle}
         />
-        {visible &&
-          <Calendar
-            instance={this.props.instance}
-            datetime={this.state.datetime}
-            onSelect={::this.onSelect}
-            above={bool =>
-              typeof bool === 'undefined' ? this.above : (this.above = bool)}
-            level={this.state.level}
-            setLevel={level => this.setState({ level })}
-            validate={::this.validate}
-            options={this.props.options}
-            inputRect={this._input.getClientRects()[0]}
-            hideOutsideDateTimes={this.props.hideOutsideDateTimes}
-            timeStep={this.props.timeStep}
-            style={this.props.calendarStyle}
-            className={this.props.calendarClassName}
-            theme={this.props.theme}
-          />}
+        {visible && (
+          <Portal>
+            <Calendar
+              instance={this.props.instance}
+              datetime={this.state.datetime}
+              onSelect={::this.onSelect}
+              above={(bool) =>
+                typeof bool === "undefined" ? this.above : (this.above = bool)
+              }
+              level={this.state.level}
+              setLevel={(level) => this.setState({ level })}
+              validate={::this.validate}
+              options={this.props.options}
+              inputRect={this._input.getClientRects()[0]}
+              hideOutsideDateTimes={this.props.hideOutsideDateTimes}
+              timeStep={this.props.timeStep}
+              style={this.props.calendarStyle}
+              className={this.props.calendarClassName}
+              theme={this.props.theme}
+            />
+          </Portal>
+        )}
       </div>
-    )
+    );
   }
 }
-
 
 export default Kronos;
