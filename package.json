@@ -51,6 +51,7 @@
     "@babel/plugin-proposal-function-bind": "7.16.7",
     "@babel/preset-env": "7.16.11",
     "@babel/preset-react": "7.16.7",
+    "@changesets/changelog-github": "^0.4.3",
     "@changesets/cli": "^2.21.1",
     "babel-eslint": "8.2.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
