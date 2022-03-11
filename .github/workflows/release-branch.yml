@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+      - 'master'
+      - 'build/*'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node & yarn
+        uses: volta-cli/action@v1
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        env:
+          npm_config_userconfig: '.npmrc_ci'
+          GPR_READ_TOKEN: ${{ secrets.GPR_READ_TOKEN }}
+
+      - name: Build
+        # build and use yarn pack to generate package
+        # this will replicate npm package publish behaviour
+        # `yarn pack && tar` will create new folder package with
+        # all content.
+        run: yarn build && yarn pack && tar -xf *.tgz
+
+      - name: Branch Name
+        id: branch_name
+        uses: actions/github-script@0.5.0
+        with:
+          result-encoding: string
+          # if triggered in PR head_ref is branch else ref is branch
+          # also ref is in the form `refs/heads/branch_name` (head_ref is branch_name)
+          script: |
+            const { GITHUB_REF, GITHUB_HEAD_REF } = process.env;
+            return GITHUB_HEAD_REF || GITHUB_REF.replace('refs/heads/', '');
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: build/${{ steps.branch_name.outputs.result }}
+          folder: package
