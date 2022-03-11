@@ -5,16 +5,10 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "start": "node devServer.js",
-    "build": "npm run clean && npm run build:lib && npm run build:es",
-    "build:lib": "NODE_ENV=production BABEL_ENV=commonjs babel src -d lib",
+    "build": "yarn run clean && yarn build:lib && yarn build:es",
+    "build:lib": "NODE_ENV=production MODULES=commonjs babel src -d lib",
     "build:es": "NODE_ENV=production babel src -d es",
-    "build:dev": "BABEL_ENV=development babel src -d lib",
-    "build:umd": "NODE_ENV=production webpack --config webpack.config.prod.js -p",
-    "build:examples": "NODE_ENV=production webpack --config examples/webpack.config.examples.js",
-    "clean": "rimraf dist && rimraf lib && npm run clean:examples",
-    "clean:examples": "rimraf examples/bundle.*",
-    "push_examples": "./scripts/push_ghpages",
+    "clean": "rimraf lib && rimraf es",
     "release": "yarn build && changeset publish"
   },
   "repository": {
