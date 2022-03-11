@@ -1,5 +1,5 @@
 {
-  "name": "react-kronos",
+  "name": "@locus-taxy/react-kronos",
   "version": "1.10.1",
   "description": "A fast, intuitive, and elegant date and time picker for React.",
   "main": "lib/index.js",
@@ -14,11 +14,12 @@
     "build:examples": "NODE_ENV=production webpack --config examples/webpack.config.examples.js",
     "clean": "rimraf dist && rimraf lib && npm run clean:examples",
     "clean:examples": "rimraf examples/bundle.*",
-    "push_examples": "./scripts/push_ghpages"
+    "push_examples": "./scripts/push_ghpages",
+    "release": "yarn build && changeset publish"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dubert/react-kronos"
+    "url": "https://github.com/locus-taxy/react-kronos"
   },
   "files": [
     "lib",
@@ -41,12 +42,8 @@
     "days",
     "hours"
   ],
-  "author": "Luke Dubert <dubert@me.com> (http://github.com/dubert)",
+  "author": "Mara Labs",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dubert/react-kronos/issues"
-  },
-  "homepage": "http://dubert.github.io/react-kronos",
   "devDependencies": {
     "@babel/cli": "7.17.6",
     "@babel/core": "7.17.5",
@@ -54,6 +51,8 @@
     "@babel/plugin-proposal-function-bind": "7.16.7",
     "@babel/preset-env": "7.16.11",
     "@babel/preset-react": "7.16.7",
+    "@changesets/changelog-github": "^0.4.3",
+    "@changesets/cli": "^2.21.1",
     "babel-eslint": "8.2.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "prop-types": "^15.6.0",
@@ -77,5 +76,8 @@
   "volta": {
     "node": "14.18.1",
     "yarn": "1.22.15"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }

@@ -1,37 +1,16 @@
-React Kronos 1.7
+React Kronos
 ================
 
 A fast, intuitive, and elegant date and time picker for React.
 
-## Philosophy
-
-- Works straight out of the box with minimal props
-- Provide a few props and options that give lots of control
-- Allow for granular control when needed
-- Style is done in JS and can be easily modified
-- Beautiful code and appearance
-
-> #### Rationale
->
-> Even though there are many React Date and/or Time components, I'm developing my own because none of them do everything that I need.
->
-> Key requirements:
-> - Separate date and/or time components (many only have date)
-> - Easily style-able from JS (not have to muck around in the css)
-> - Return multiple time formats (Date, Moment, ISO, string)
-> - Lightweight, use no jquery
-> - Active on focus, disappear on blur
-> - Efficient keyboard navigation
-
-## [Demo](http://dubert.github.io/react-kronos)
-
 ## Usage
 
-1. NPM install `npm install react-kronos`
-2. Require Kronos `import Kronos from 'react-kronos'`
+1. Install `yarn add @locus-taxy/react-kronos`
 3. Use
 ```jsx
-<Kronos
+import ReactKronos from '@locus-taxy/react-kronos';
+
+<ReactKronos
   date={this.state.datetime}
   onChange={this.onChange}
 />
