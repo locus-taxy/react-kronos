@@ -198,7 +198,8 @@ class Kronos extends Component {
   }
 
   save(saving) {
-    const { datetime } = this.state
+    let { datetime } = this.state
+    datetime = datetime || Moment();
     if (typeof this.props.date !== 'undefined') {
       saving.hours(datetime.hours())
       saving.minutes(datetime.minutes())
@@ -301,7 +302,7 @@ class Kronos extends Component {
       this.toggle(false)
       if (this.props.onBlur) this.props.onBlur(e)
     }
-    if (this.state.input == this.state.datetime.format(this.format())) {
+    if (this.state.input == datetime.format(this.format())) {
       return
     } else {
       datetime = this.parse(this.state.input)
