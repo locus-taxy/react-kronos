@@ -92,8 +92,8 @@ class Kronos extends Component {
     preventClickOnDateTimeOutsideRange: false,
     visible: false,
     disabled: false,
-    portal: false,
     theme: {},
+    portal: false
   };
 
   static above = false
@@ -407,9 +407,13 @@ class Kronos extends Component {
   }
 
   renderInput(reference) {
-    const inputClasses = cn(this.props.inputClassName, this.props.theme.input, {
-      "outside-range": this.state.dateTimeExceedsValidRange,
-    });
+    const inputClasses = cn(
+      this.props.inputClassName,
+      this.props.theme.input, 
+      {
+        "outside-range": this.state.dateTimeExceedsValidRange,
+      }
+    );
 
     return (
       <input
