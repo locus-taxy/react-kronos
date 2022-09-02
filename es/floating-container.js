@@ -15,13 +15,13 @@ const FloatingContainer = ({
     placement: 'bottom-start',
     whileElementsMounted: autoUpdate
   });
-  return /*#__PURE__*/React.createElement(React.Fragment, null, children({
+  return children({
     x,
     y,
     reference,
     floating,
     strategy
-  }));
+  });
 };
 
 export default FloatingContainer;
