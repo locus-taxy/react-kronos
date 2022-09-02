@@ -426,7 +426,7 @@ class Kronos extends Component {
       [this.props.theme.kronosDisabled]: this.props.disabled
     });
 
-    if (this.props.renderOnPortal) {
+    if (this.props.portal) {
       return /*#__PURE__*/React.createElement(FloatingContainer, null, ({
         x,
         y,
@@ -463,7 +463,7 @@ _defineProperty(Kronos, "defaultProps", {
   preventClickOnDateTimeOutsideRange: false,
   visible: false,
   disabled: false,
-  renderOnPortal: false,
+  portal: false,
   theme: {}
 });
 
