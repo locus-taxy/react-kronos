@@ -55,6 +55,8 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
+    "@floating-ui/react-dom": "^1.0.0",
+    "@floating-ui/react-dom-interactions": "^0.9.3",
     "classnames": "^2.2.5",
     "color": "^0.11.4",
     "jss": "^6.5.0",

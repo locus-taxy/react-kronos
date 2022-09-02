@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Moment from 'moment'
+import { FloatingPortal } from "@floating-ui/react-dom-interactions";
 
 import cn from 'classnames'
 
 import { Keys, Levels, Units, Types } from './constants'
 import Calendar from './calendar'
+import FloatingContainer from './floating-container'
 
 const ISOregex = /((\d{4}\-\d\d\-\d\d)[tT]([\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))/
 const minutesOfDay = m => {
@@ -78,8 +80,9 @@ class Kronos extends Component {
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
     onSelect: PropTypes.func,
-    theme: PropTypes.object
-  }
+    theme: PropTypes.object,
+    portal: PropTypes.bool,
+  };
 
   static defaultProps = {
     closeOnSelect: true,
@@ -89,8 +92,9 @@ class Kronos extends Component {
     preventClickOnDateTimeOutsideRange: false,
     visible: false,
     disabled: false,
-    theme: {}
-  }
+    theme: {},
+    portal: false
+  };
 
   static above = false
 
@@ -402,64 +406,112 @@ class Kronos extends Component {
     }
   }
 
+  renderInput(reference) {
+    const inputClasses = cn(
+      this.props.inputClassName,
+      this.props.theme.input, 
+      {
+        "outside-range": this.state.dateTimeExceedsValidRange,
+      }
+    );
+
+    return (
+      <input
+        type="text"
+        id={this.props.inputId}
+        ref={(input) => {
+          this._input = input;
+          reference?.(input);
+        }}
+        value={this.state.input || ""}
+        onClick={::this.onClickInput}
+        onFocus={::this.onFocusInput}
+        onBlur={::this.onBlurInput}
+        onKeyDown={(e) => this.onKeyDown(e.keyCode)}
+        onChange={::this.onChangeInput}
+        placeholder={this.props.placeholder}
+        name={this.props.name}
+        className={inputClasses}
+        disabled={this.props.disabled}
+        style={this.props.inputStyle}
+      />
+    );
+  }
+
+  renderCalendar() {
+    const visible = this.props.controlVisibility
+      ? this.props.visible
+      : this.state.visible;
+
+    if (!visible) {
+      return null;
+    }
+
+    return (
+      <Calendar
+        instance={this.props.instance}
+        datetime={this.state.datetime}
+        onSelect={::this.onSelect}
+        above={(bool) =>
+          typeof bool === "undefined" ? this.above : (this.above = bool)
+        }
+        level={this.state.level}
+        setLevel={(level) => this.setState({ level })}
+        validate={::this.validate}
+        options={this.props.options}
+        inputRect={this._input.getClientRects()[0]}
+        hideOutsideDateTimes={this.props.hideOutsideDateTimes}
+        timeStep={this.props.timeStep}
+        style={this.props.calendarStyle}
+        className={this.props.calendarClassName}
+        theme={this.props.theme}
+      />
+    );
+  }
+
   render() {
     const mainClasses = cn(
-      'react-kronos',
+      "react-kronos",
       this.props.className,
       this.props.instance,
       this.props.theme.kronos,
       {
-        [this.props.theme.kronosDisabled]: this.props.disabled
+        [this.props.theme.kronosDisabled]: this.props.disabled,
       }
-    )
-    const inputClasses = cn(
-      this.props.inputClassName,
-      this.props.theme.input,
-      { 'outside-range': this.state.dateTimeExceedsValidRange },
-    )
-    const visible = this.props.controlVisibility
-      ? this.props.visible
-      : this.state.visible
+    );
+
+    if (this.props.portal) {
+      return (
+        <FloatingContainer>
+          {({ x, y, reference, floating, strategy }) => (
+            <div className={mainClasses} data-toolbox="kronos">
+              {this.renderInput(reference)}
+              <FloatingPortal>
+                <div
+                  ref={floating}
+                  style={{
+                    position: strategy,
+                    top: y ?? 0,
+                    left: x ?? 0,
+                    zIndex: 5001,
+                  }}
+                >
+                  {this.renderCalendar()}
+                </div>
+              </FloatingPortal>
+            </div>
+          )}
+        </FloatingContainer>
+      );
+    }
+
     return (
       <div className={mainClasses} data-toolbox="kronos">
-        <input
-          type="text"
-          id={this.props.inputId}
-          ref={input => (this._input = input)}
-          value={this.state.input || ''}
-          onClick={::this.onClickInput}
-          onFocus={::this.onFocusInput}
-          onBlur={::this.onBlurInput}
-          onKeyDown={e => this.onKeyDown(e.keyCode)}
-          onChange={::this.onChangeInput}
-          placeholder={this.props.placeholder}
-          name={this.props.name}
-          className={inputClasses}
-          disabled={this.props.disabled}
-          style={this.props.inputStyle}
-        />
-        {visible &&
-          <Calendar
-            instance={this.props.instance}
-            datetime={this.state.datetime}
-            onSelect={::this.onSelect}
-            above={bool =>
-              typeof bool === 'undefined' ? this.above : (this.above = bool)}
-            level={this.state.level}
-            setLevel={level => this.setState({ level })}
-            validate={::this.validate}
-            options={this.props.options}
-            inputRect={this._input.getClientRects()[0]}
-            hideOutsideDateTimes={this.props.hideOutsideDateTimes}
-            timeStep={this.props.timeStep}
-            style={this.props.calendarStyle}
-            className={this.props.calendarClassName}
-            theme={this.props.theme}
-          />}
+        {this.renderInput()}
+        {this.renderCalendar()}
       </div>
-    )
+    );
   }
 }
-
 
 export default Kronos;
