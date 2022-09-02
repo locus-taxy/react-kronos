@@ -8,7 +8,7 @@ const FloatingContainer = ({ children }) => {
     whileElementsMounted: autoUpdate
   });
 
-  return <>{children({ x, y, reference, floating, strategy })}</>;
+  return children({ x, y, reference, floating, strategy });
 };
 
 export default FloatingContainer;
