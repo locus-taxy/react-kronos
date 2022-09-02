@@ -81,7 +81,7 @@ class Kronos extends Component {
     onChange: PropTypes.func,
     onSelect: PropTypes.func,
     theme: PropTypes.object,
-    renderOnPortal: PropTypes.bool,
+    portal: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -92,7 +92,7 @@ class Kronos extends Component {
     preventClickOnDateTimeOutsideRange: false,
     visible: false,
     disabled: false,
-    renderOnPortal: false,
+    portal: false,
     theme: {},
   };
 
@@ -476,7 +476,7 @@ class Kronos extends Component {
       }
     );
 
-    if (this.props.renderOnPortal) {
+    if (this.props.portal) {
       return (
         <FloatingContainer>
           {({ x, y, reference, floating, strategy }) => (
