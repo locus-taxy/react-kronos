@@ -463,8 +463,8 @@ _defineProperty(Kronos, "defaultProps", {
   preventClickOnDateTimeOutsideRange: false,
   visible: false,
   disabled: false,
-  portal: false,
-  theme: {}
+  theme: {},
+  portal: false
 });
 
 _defineProperty(Kronos, "above", false);
