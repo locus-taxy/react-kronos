@@ -1,1 +1,2 @@
 @locus-taxy:registry=https://npm.pkg.github.com/
+//npm.pkg.github.com/:_authToken=${GPR_READ_TOKEN}
