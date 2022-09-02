@@ -33,4 +33,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPR_READ_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           npm_config_userconfig: '.npmrc_ci'
