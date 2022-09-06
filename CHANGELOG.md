@@ -1,5 +1,11 @@
 # @locus-taxy/react-kronos
 
+## 2.1.1
+
+### Patch Changes
+
+- [#20](https://github.com/locus-taxy/react-kronos/pull/20) [`ad35129`](https://github.com/locus-taxy/react-kronos/commit/ad35129c6731af64c94d535fcf120b93ef43aa56) Thanks [@kshanmugharaj](https://github.com/kshanmugharaj)! - add portal class when portal is enabled
+
 ## 2.1.0
 
 ### Minor Changes
