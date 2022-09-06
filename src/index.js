@@ -465,6 +465,7 @@ class Kronos extends Component {
         style={this.props.calendarStyle}
         className={this.props.calendarClassName}
         theme={this.props.theme}
+        portal={this.props.portal}
       />
     );
   }
