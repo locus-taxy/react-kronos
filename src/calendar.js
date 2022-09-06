@@ -29,6 +29,7 @@ class Calendar extends Component {
     setLevel: PropTypes.func.isRequired,
     onMouseDown: PropTypes.func,
     onMouseUp: PropTypes.func,
+    portal: PropTypes.bool,
   }
 
   static _isMounted = false
@@ -266,7 +267,11 @@ class Calendar extends Component {
 
     return (
       <div
-        className={cn(this.props.className, calendarClass)}
+        className={cn(
+          this.props.className,
+          calendarClass,
+          this.props.portal ? theme.portal : ""
+        )}
         onMouseDown={e => this.props.above(true)}
         onMouseUp={e => this.props.above(false)}
         style={this.props.style}
