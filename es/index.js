@@ -417,7 +417,8 @@ class Kronos extends Component {
       timeStep: this.props.timeStep,
       style: this.props.calendarStyle,
       className: this.props.calendarClassName,
-      theme: this.props.theme
+      theme: this.props.theme,
+      portal: this.props.portal
     });
   }
 
